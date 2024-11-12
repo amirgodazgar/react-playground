@@ -1,9 +1,7 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
 import "./App.css";
 import Loading from "./components/Loading";
-
-import { getPokemonList } from "./services/list";
 import { Fragment } from "react/jsx-runtime";
+import { useGetPokemonLoadMore } from "./hooks/useGetPokemonLoadMore";
 // import { useGetPokemonList } from "./hooks/useGetPokemonList";
 
 function App() {
@@ -17,23 +15,7 @@ function App() {
     hasNextPage,
     isFetchingNextPage,
     status,
-  } = useInfiniteQuery({
-    queryKey: ["pokemoons"],
-    queryFn: ({ pageParam }) => getPokemonList({ pageParam }),
-    initialPageParam: 4,
-    getNextPageParam: (lastPage, allPages, lastPageParam) => {
-      if (lastPage.length === 0) {
-        return undefined;
-      }
-      return lastPageParam + 1;
-    },
-    getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
-      if (firstPageParam <= 1) {
-        return undefined;
-      }
-      return firstPageParam - 1;
-    },
-  });
+  } = useGetPokemonLoadMore();
 
   console.log(data);
 
